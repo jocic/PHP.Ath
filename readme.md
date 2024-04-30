@@ -1,6 +1,8 @@
 # Google Authenticator
 
-[![Build Status](https://travis-ci.org/jocic/PHP.GoogleAuthenticator.svg?branch=master)](https://travis-ci.org/jocic/PHP.GoogleAuthenticator) [![Coverage Status](https://coveralls.io/repos/github/jocic/PHP.GoogleAuthenticator/badge.svg?branch=master)](https://coveralls.io/github/jocic/PHP.GoogleAuthenticator?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c7c18b4866a54e79b185978e5a180f06)](https://www.codacy.com/app/jocic/PHP.GoogleAuthenticator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jocic/PHP.GoogleAuthenticator&amp;utm_campaign=Badge_Grade) [![Latest Stable Version](https://poser.pugx.org/jocic/google-authenticator/v/stable)](https://packagist.org/packages/jocic/google-authenticator) [![License](https://poser.pugx.org/jocic/google-authenticator/license)](https://packagist.org/packages/jocic/google-authenticator)
+[![Coverage Status](https://coveralls.io/repos/github/jocic/PHP.GoogleAuthenticator/badge.svg?branch=master)](https://coveralls.io/github/jocic/PHP.GoogleAuthenticator?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/jocic/google-authenticator/v/stable)](https://packagist.org/packages/jocic/google-authenticator)
+[![License](https://poser.pugx.org/jocic/google-authenticator/license)](https://packagist.org/packages/jocic/google-authenticator)
 
 Google Authenticator is a mini PHP library for implementing Multi-Factor Authentication by utilizing Google's Authenticator App. It was written to simplify the usually complicated implementation process.
 
@@ -13,8 +15,6 @@ Following specifications were referenced:
 *   [RFC 6287](other/specifications/rfc6287.txt) - OCRA: OATH Challenge-Response Algorithm
 
 [![Buy Me Coffee](images/buy-me-coffee.png)](https://www.paypal.me/DjordjeJocic)
-
-**Song of the project:** [Iron Maiden - The Trooper](https://www.youtube.com/watch?v=X4bgXH3sJ2Q)
 
 ## Versioning Scheme
 
@@ -80,31 +80,8 @@ Please don’t forget to install necessary dependencies before attempting to do 
 bash ./scripts/composer.sh install
 ```
 
-## Contribution
-
-Please review the following documents if you are planning to contribute to the project:
-
-*   [Contributor Covenant Code of Conduct](code-of-conduct.md)
-*   [Contribution Guidelines](contributing.md)
-*   [Pull Request Template](pull-request-template.md)
-*   [MIT License](license.md)
-
-## Integration
-
-My hourly rate is fairly reasonable so, if you need help with integrating **Google Authenticator** to your existing project, feel free to contact me via the email below.
-
-Integration inquiries: [office@djordjejocic.com](mailto:office@djordjejocic.com)
-
-## Support
-
-Please don't hesitate to contact me if you have any questions, ideas, or concerns.
-
-My Twitter account is: [@jocic_91](https://www.twitter.com/jocic_91)
-
-My support E-Mail address is: [support@djordjejocic.com](mailto:support@djordjejocic.com)
-
 ## Copyright & License
 
-Copyright (C) 2018 Đorđe Jocić
+Copyright (C) 2024 Đorđe Jocić
 
 Licensed under the MIT license.

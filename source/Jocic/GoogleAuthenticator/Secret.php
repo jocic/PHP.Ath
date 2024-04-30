@@ -2,7 +2,7 @@
     
     /*******************************************************************\
     |* Author: Djordje Jocic                                           *|
-    |* Year: 2018                                                      *|
+    |* Year: 2024                                                      *|
     |* License: MIT License (MIT)                                      *|
     |* =============================================================== *|
     |* Personal Website: http://www.djordjejocic.com/                  *|
@@ -38,11 +38,10 @@
      * password generation and validation of the same.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
-    class Secret implements SecretInterface
+    class Secret implements Interfaces\SecretInterface
     {
         /******************\
         |* CORE CONSTANTS *|
@@ -51,33 +50,31 @@
         /**
          * Method constant for generating secrets using the <i>base</i>
          * creation method - picking random <i>Base 32</i> values until an
-         * 80-bit secret is generated.
+         * 80-bit long secret is generated.
          * 
          * @var    integer
          * @access public
          */
-        
         const M_BASE = 0;
         
         /**
-         * Method constant for generating secrets using <i>numerical</i>
+         * Method constant for generating secrets using the <i>numerical</i>
          * creation method - picking random numbers between 0 and 256 until an
-         * 80-bit secret is generated.
+         * 80-bit long secret is generated.
          * 
          * @var    integer
          * @access public
          */
-        
         const M_NUMERICAL = 1;
         
         /**
-         * Method constant for generating secrets using <i>binary</i> creation
-         * method - picking random bits until an 80-bit secret is generated.
+         * Method constant for generating secrets using the <i>binary</i>
+         * creation method - picking random bits until an 80-bit long secret
+         * is generated.
          * 
          * @var    integer
          * @access public
          */
-        
         const M_BINARY = 2;
         
         /******************\
@@ -90,42 +87,25 @@
          * @var    string
          * @access private
          */
-        
         private $value = "";
-        
-        /*******************\
-        |* OTHER VARIABLES *|
-        \*******************/
-        
-        /**
-         * Object containing <i>Base 32</i> encoder.
-         * 
-         * @var    object
-         * @access private
-         */
-        
-        private $encoder = null;
         
         /*******************\
         |* MAGIC FUNCTIONS *|
         \*******************/
         
         /**
-         * Generic PHP constructor used for instantiating <i>Base 32</i> object.
+         * Generic PHP constructor for the class <i>Secret</i>.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param string $value
          *   Value that should be set.
          */
-        
         public function __construct($value = null)
         {
             // Logic
-            
-            $this->encoder = new Base32();
             
             if ($value == null)
             {
@@ -143,14 +123,13 @@
          * Returns a value of the secret.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return string
          *   Currently set value of the secret.
          */
-        
-        public function getValue()
+        public function getValue() : string
         {
             // Logic
             
@@ -158,20 +137,22 @@
         }
         
         /**
-         * Returns an instantiated <i>Base 32</i> encoder object, or throws an
-         * exception if it's value is <i>NULL</i>.
+         * Returns an instantiated <i>Base 32</i> encoder object.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return object
          *   Instantiated <i>Base 32</i> encoder object.
          */
-        
-        private function getEncoder()
+        private function getEncoder() : Base32
         {
             // Logic
+            
+            if ($this->encoder == NULL) {
+                $this->encoder = new Base32();
+            }
             
             return $this->encoder;
         }
@@ -184,24 +165,26 @@
          * Sets a value of the secret.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param string $secret
          *   New value of the secret.
-         * @return void
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setValue($secret)
+        public function setValue($secret) : self
         {
             // Logic
             
             if (!$this->isSecretValid($secret))
             {
-                throw new \Exception("Invalid secret provided. Secret: \"$secret\"");
+                throw new \Exception("Invalid secret provided: \"$secret\"");
             }
             
             $this->value = $secret;
+            
+            return $this;
         }
         
         /****************\
@@ -211,20 +194,19 @@
         /**
          * Generates a random secret that may be used for implementing MFA.
          * 
-         * Note: Secrets are actually random 80-bit values encoded using
-         * <i>Base 32</i> encoder.
+         * Note: Secrets are random 80-bit values encoded using BASE32.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param integer $method
-         *   Method used for generating the secret. Default value is <i>0</i>.
+         *   Method used for generating the secret. Default value
+         *   corresponds to the <i>M_BASE</i> constant.
          * @return string
          *   Value of the secret - randomly-generated.
          */
-        
-        public function generateValue($method = 0)
+        public function generateValue($method = self::M_BASE) : string
         {
             // Core Variables
             
@@ -234,16 +216,16 @@
             
             switch ($method)
             {
-                case 0:
-                    $value = $this->runBaseMethod();
+                case self::M_BASE:
+                    $value = $this->generateValue__BASE();
                     break;
                 
-                case 1:
-                    $value = $this->runNumericalMethod();
+                case self::M_NUMERICAL:
+                    $value = $this->generateValue__NUMERICAL();
                     break;
                 
-                case 2:
-                    $value = $this->runBinaryMethod();
+                case self::M_BINARY:
+                    $value = $this->generateValue__BINARY();
                     break;
                 
                 default:
@@ -258,10 +240,10 @@
         \*****************/
         
         /**
-         * Checks if a provided secret is valid or not.
+         * Checks if the provided secret is valid or not.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param string $secret
@@ -269,8 +251,7 @@
          * @return bool
          *   Value <i>TRUE</i> if secret is valid, and vice versa.
          */
-        
-        public function isSecretValid($secret)
+        public function isSecretValid($secret) : bool
         {
             // Core Variables
             
@@ -308,14 +289,13 @@
          * Generates a random secret using the <i>base</i> method.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return string
          *   Value of the secret - randomly-generated.
          */
-        
-        private function runBaseMethod()
+        private function generateValue__BASE() : string
         {
             // Core Variables
             
@@ -331,8 +311,7 @@
             
             for ($i = 0; $i < 16; $i ++)
             {
-                $index = rand(0, $maxIndex);
-                
+                $index  = rand(0, $maxIndex);
                 $value .= $baseTable[$index];
             }
             
@@ -343,14 +322,13 @@
          * Generates a random secret using the <i>numerical</i> method.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return string
          *   Value of the secret - randomly-generated.
          */
-        
-        private function runNumericalMethod()
+        private function generateValue__NUMERICAL() : string
         {
             // Core Variables
             
@@ -362,7 +340,6 @@
             for ($i = 0; $i < 10; $i ++)
             {
                 $number = rand(0, 256);
-                
                 $value .= sprintf("%c", $number);
             }
             
@@ -373,14 +350,13 @@
          * Generates a random secret using the <i>binary</i> method.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return string
          *   Value of the secret - randomly-generated.
          */
-        
-        private function runBinaryMethod()
+        private function generateValue__BINARY() : string
         {
             // Core Variables
             

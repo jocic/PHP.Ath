@@ -2,7 +2,7 @@
     
     /*******************************************************************\
     |* Author: Djordje Jocic                                           *|
-    |* Year: 2018                                                      *|
+    |* Year: 2024                                                      *|
     |* License: MIT License (MIT)                                      *|
     |* =============================================================== *|
     |* Personal Website: http://www.djordjejocic.com/                  *|
@@ -29,86 +29,49 @@
     |* OTHER DEALINGS IN THE SOFTWARE.                                 *|
     \*******************************************************************/
     
-    namespace Jocic\GoogleAuthenticator;
+    use PHPUnit\Framework\TestCase;
     
     /**
-     * <i>SecretInterface</i> is an interface used to enforce implementation of
-     * core secret related methods.
+     * <i>TestAutoloader</i> class is used for testing project's autoloader.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
     
-    interface SecretInterface
+    class Autoloader extends TestCase
     {
-        /***************\
-        |* GET METHODS *|
-        \***************/
+        /*******************\
+        |* PRIMARY METHODS *|
+        \*******************/
         
         /**
-         * Returns a value of the secret.
+         * Tests the project's autoloading function.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
-         * @version   1.0.0
-         */
-        
-        public function getValue();
-        
-        /***************\
-        |* SET METHODS *|
-        \***************/
-        
-        /**
-         * Sets a value of the secret.
-         * 
-         * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @param string $secret
-         *   New value of the secret.
+         * @return void
          */
         
-        public function setValue($secret);
-        
-        /****************\
-        |* CORE METHODS *|
-        \****************/
-        
-        /**
-         * Generates a random secret that may be used for implementing MFA.
-         * 
-         * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
-         * @version   1.0.0
-         */
-        
-        public function generateValue();
-        
-        /*****************\
-        |* CHECK METHODS *|
-        \*****************/
-        
-        /**
-         * Checks if a provided secret is valid or not.
-         * 
-         * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
-         * @version   1.0.0
-         * 
-         * @param string $secret
-         *   Secret that needs to be checked.
-         */
-        
-        public function isSecretValid($secret);
-        
-        /*****************\
-        |* OTHER METHODS *|
-        \*****************/
-        
-        // OTHER METHODS GO HERE
+        public function testFunction()
+        {
+            // Core Variables
+            
+            $testValues = [
+                "\Jocic\GoogleAuthenticator\Helper" => true,
+                "\Jocic\GoogleAuthenticator\Potato" => false,
+            ];
+            
+            // Logic
+            
+            foreach ($testValues as $testValue => $testResult)
+            {
+                $this->assertSame($testResult,
+                    load_google_authenticator_class($testValue), $testValue);
+            }
+        }
     }
     
 ?>

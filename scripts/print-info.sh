@@ -2,7 +2,7 @@
 
 ###################################################################
 # Script Author: Djordje Jocic                                    #
-# Script Year: 2018                                               #
+# Script Year: 2024                                               #
 # Script License: MIT License (MIT)                               #
 # =============================================================== #
 # Personal Website: http://www.djordjejocic.com/                  #
@@ -46,7 +46,7 @@ php_command="$(command -v php)";
 php_version="$(php --version | sed -n 1p)";
 
 ###########################
-# Step 1 -System Details #
+# Step 1 - System Details #
 ###########################
 
 printf "[+] System Details\n\n";
@@ -65,7 +65,5 @@ printf "\n[+] PHP Details\n\n";
 printf "PHP Command: %s\n" "$php_command";
 
 if [ -n "$php_command" ]; then
-    
     printf "PHP Version: %s\n" "$php_version";
-    
 fi

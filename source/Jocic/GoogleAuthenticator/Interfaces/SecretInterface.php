@@ -2,7 +2,7 @@
     
     /*******************************************************************\
     |* Author: Djordje Jocic                                           *|
-    |* Year: 2018                                                      *|
+    |* Year: 2024                                                      *|
     |* License: MIT License (MIT)                                      *|
     |* =============================================================== *|
     |* Personal Website: http://www.djordjejocic.com/                  *|
@@ -29,74 +29,85 @@
     |* OTHER DEALINGS IN THE SOFTWARE.                                 *|
     \*******************************************************************/
     
-    use PHPUnit\Framework\TestCase;
+    namespace Jocic\GoogleAuthenticator\Interfaces;
     
     /**
-     * <i>TestAutoloader</i> class is used for testing project's autoloader as
-     * it isn't tested automatically by Travis CI.
+     * <i>SecretInterface</i> is an interface used to enforce implementation
+     * of core methods of the class <i>Secret</i>.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
-    class TestAutoloader extends TestCase
+    interface SecretInterface
     {
-        /*********************\
-        |* GET & SET METHODS *|
-        \*********************/
+        /***************\
+        |* GET METHODS *|
+        \***************/
         
-        // GET & SET METHODS GO HERE
+        /**
+         * Returns a value of the secret.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @return string
+         *   Currently set value of the secret.
+         */
+        public function getValue() : string;
+        
+        /***************\
+        |* SET METHODS *|
+        \***************/
+        
+        /**
+         * Sets a value of the secret.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @param string $secret
+         *   New value of the secret.
+         * @return object
+         *   Reference to the object calling the method - current object.
+         */
+        public function setValue($secret) : self;
+        
+        /****************\
+        |* CORE METHODS *|
+        \****************/
+        
+        /**
+         * Generates a random secret that may be used for implementing MFA.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @return string
+         *   Value of the secret - randomly-generated.
+         */
+        public function generateValue() : string;
         
         /*****************\
         |* CHECK METHODS *|
         \*****************/
         
-        // CHECK METHODS GO HERE
-        
-        /*******************\
-        |* PRIMARY METHODS *|
-        \*******************/
-        
         /**
-         * Tests the project's autoloading function.
+         * Checks if the provided secret is valid or not.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @return void
+         * @param string $secret
+         *   Secret that needs to be checked.
+         * @return bool
+         *   Value <i>TRUE</i> if secret is valid, and vice versa.
          */
-        
-        public function testFunction()
-        {
-            // Core Variables
-            
-            $testValues = [
-                "\Jocic\GoogleAuthenticator\Secret" => true,
-                "\Jocic\GoogleAuthenticator\Potato" => false,
-            ];
-            
-            // Logic
-            
-            foreach ($testValues as $testValue => $testResult)
-            {
-                $this->assertSame($testResult,
-                    load_google_authenticator_class($testValue), $testValue);
-            }
-        }
-        
-        /*********************\
-        |* SECONDARY METHODS *|
-        \*********************/
-        
-        // SECONDARY METHODS GO HERE
-        
-        /*****************\
-        |* OTHER METHODS *|
-        \*****************/
-        
-        // OTHER METHODS GO HERE
+        public function isSecretValid($secret) : bool;
     }
     
 ?>

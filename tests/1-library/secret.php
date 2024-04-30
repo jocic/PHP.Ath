@@ -2,7 +2,7 @@
     
     /*******************************************************************\
     |* Author: Djordje Jocic                                           *|
-    |* Year: 2018                                                      *|
+    |* Year: 2024                                                      *|
     |* License: MIT License (MIT)                                      *|
     |* =============================================================== *|
     |* Personal Website: http://www.djordjejocic.com/                  *|
@@ -30,18 +30,17 @@
     \*******************************************************************/
     
     use PHPUnit\Framework\TestCase;
-    use Jocic\GoogleAuthenticator\Secret;
+    use Jocic\GoogleAuthenticator\Secret as MfaSecret;
     
     /**
-     * <i>TestSecret</i> class is used for testing method implementation of the
-     * class <i>Secret</i>.
+     * <i>TestSecret</i> class is used for testing method implementation
+     * of the class <i>Secret</i>.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
-    class TestSecret extends TestCase
+    class Secret extends TestCase
     {
         /*********************\
         |* GET & SET METHODS *|
@@ -51,17 +50,16 @@
          * Tests <i>setValue</i> & <i>getValue</i> methods.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testValueMethods()
         {
             // Core Variables
             
-            $secret = new Secret();
+            $secret = new MfaSecret();
             
             // Other Variables
             
@@ -90,7 +88,7 @@
             }
             catch (\Exception $e)
             {
-                $this->assertEquals("Invalid secret provided. Secret: \"#\"",
+                $this->assertEquals("Invalid secret provided: \"#\"",
                     $e->getMessage());
             }
         }
@@ -103,17 +101,16 @@
          * Tests secret validation.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testValidation()
         {
             // Core Variables
             
-            $secret = new Secret();
+            $secret = new MfaSecret();
             
             // Other Variables
             
@@ -143,17 +140,16 @@
          * Tests <i>generate</i> method of the <i>Secret</i> class.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testGenerateMethod()
         {
             // Core Variables
             
-            $secret = new Secret();
+            $secret = new MfaSecret();
             
             // Other Variables
             
@@ -163,7 +159,7 @@
             
             for ($i = 0; $i < 10; $i ++)
             {
-                $value = $secret->generateValue(Secret::M_BASE);
+                $value = $secret->generateValue(MfaSecret::M_BASE);
                 
                 $this->assertSame(true, $secret->isSecretValid($value), $value);
             }
@@ -172,7 +168,7 @@
             
             for ($i = 0; $i < 10; $i ++)
             {
-                $value = $secret->generateValue(Secret::M_NUMERICAL);
+                $value = $secret->generateValue(MfaSecret::M_NUMERICAL);
                 
                 $this->assertSame(true, $secret->isSecretValid($value), $value);
             }
@@ -181,7 +177,7 @@
             
             for ($i = 0; $i < 10; $i ++)
             {
-                $value = $secret->generateValue(Secret::M_BINARY);
+                $value = $secret->generateValue(MfaSecret::M_BINARY);
                 
                 $this->assertSame(true, $secret->isSecretValid($value), $value);
             }
@@ -200,18 +196,6 @@
                     $e->getMessage());
             }
         }
-        
-        /*********************\
-        |* SECONDARY METHODS *|
-        \*********************/
-        
-        // SECONDARY METHODS GO HERE
-        
-        /*****************\
-        |* OTHER METHODS *|
-        \*****************/
-        
-        // OTHER METHODS GO HERE
     }
     
 ?>

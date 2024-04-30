@@ -2,7 +2,7 @@
 
 ###################################################################
 # Script Author: Djordje Jocic                                    #
-# Script Year: 2018                                               #
+# Script Year: 2024                                               #
 # Script License: MIT License (MIT)                               #
 # =============================================================== #
 # Personal Website: http://www.djordjejocic.com/                  #
@@ -45,7 +45,7 @@ php_command="$(command -v php)";
 # Composer Variables #
 ######################
 
-composer_version="1.8.0";
+composer_version="2.7.4";
 composer_location="./other/composer/$composer_version/composer.phar";
 
 #########

@@ -2,7 +2,7 @@
     
     /*******************************************************************\
     |* Author: Djordje Jocic                                           *|
-    |* Year: 2018                                                      *|
+    |* Year: 2024                                                      *|
     |* License: MIT License (MIT)                                      *|
     |* =============================================================== *|
     |* Personal Website: http://www.djordjejocic.com/                  *|
@@ -32,33 +32,25 @@
     namespace Jocic\GoogleAuthenticator;
     
     /**
-     * <i>Helper</i> is a class containing various generic
-     * methods used throughout the library.
+     * <i>Helper</i> is a class containing various generic methods used
+     * throughout the library.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
     class Helper
     {
-        /******************\
-        |* CORE CONSTANTS *|
-        \******************/
-        
-        // CORE CONSTANTS GO HERE
-        
         /******************\
         |* CORE VARIABLES *|
         \******************/
         
         /**
-         * Instance of the singleton class.
+         * Instance of the Singleton class.
          * 
          * @var    object
          * @access private
          */
-        
         private static $instance = null;
         
         /*******************\
@@ -69,37 +61,34 @@
          * Generic private constructor for a Singleton.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         protected function __construct() {}
         
         /**
          * Generic clone function for a Singleton.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         protected function __clone() {}
         
         /**
          * Generic wakeup function for a Singleton.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
-        public function __wakeup() {}
+        protected function __wakeup() {}
         
         /***************\
         |* GET METHODS *|
@@ -109,13 +98,12 @@
          * Generic getter method for the Singleton's instance.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return object
          *   Reference to the one and only Singleton's instance.
          */
-        
         public static function getInstance()
         {
             // Logic
@@ -128,22 +116,15 @@
             return static::$instance;
         }
         
-        /***************\
-        |* SET METHODS *|
-        \***************/
-        
-        // SET METHODS GO HERE
-        
         /****************\
         |* CORE METHODS *|
         \****************/
         
         /**
-         * Extracts & returns value of a set secret from the
-         * provided entity ex. Account.
+         * Returns value of a set secret from the provided entity ex. Account.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param object $entity
@@ -151,40 +132,67 @@
          * @return string
          *   Value of the set secret.
          */
-        
         public function fetchSecret($entity)
         {
             // Logic
             
-            if (!($entity instanceof Account || $entity instanceof Secret))
-            {
-                throw new \Exception("Invalid object provided.");
-            }
-            
             if ($entity instanceof Account)
             {
-                if ($entity->getAccountSecret() == null)
-                {
-                    throw new \Exception("Account is without a secret.");
-                }
-                
-                return $entity->getAccountSecret()->getValue();
+                return $this->fetchSecret__ACCOUNT($entity);
             }
             
-            return $entity->getValue();
+            if ($entity instanceof Secret)
+            {
+                return $this->fetchSecret__SECRET($entity);
+            }
+            
+            return NULL;
         }
-        
-        /*****************\
-        |* CHECK METHODS *|
-        \*****************/
-        
-        // CHECK METHODS GO HERE
         
         /*****************\
         |* OTHER METHODS *|
         \*****************/
         
-        // OTHER METHODS GO HERE
+        
+        /**
+         * Returns value of a set secret for the provided Account.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @param object $account
+         *   Account that should be used in the process.
+         * @return string
+         *   Value of the set secret.
+         */
+        private function fetchSecret__ACCOUNT($account)
+        {
+            if ($account->getAccountSecret() == null)
+            {
+                return '';
+            }
+            
+            return $account->getAccountSecret()->getValue();
+        }
+        
+        
+        /**
+         * Returns value of the provided Secret.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @param object $secret
+         *   Secret that should be used in the process.
+         * @return string
+         *   Value of the set secret.
+         */
+        private function fetchSecret__SECRET($secret)
+        {
+            return $secret->getValue();
+        }
     }
     
 ?>
