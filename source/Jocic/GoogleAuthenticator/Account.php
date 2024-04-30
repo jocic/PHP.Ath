@@ -2,7 +2,7 @@
     
     /*******************************************************************\
     |* Author: Djordje Jocic                                           *|
-    |* Year: 2018                                                      *|
+    |* Year: 2024                                                      *|
     |* License: MIT License (MIT)                                      *|
     |* =============================================================== *|
     |* Personal Website: http://www.djordjejocic.com/                  *|
@@ -36,96 +36,95 @@
      * information required for <i>2FA</i> implementation.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
-    class Account implements AccountInterface
+    class Account implements Interfaces\AccountInterface
     {
-        /******************\
-        |* CORE CONSTANTS *|
-        \******************/
-        
-        // CORE CONSTANTS GO HERE
-        
         /******************\
         |* CORE VARIABLES *|
         \******************/
         
         /**
-         * Assigned account ID.
+         * Assigned account ID, ex. <i>1337</i>.
          * 
-         * @var    integer
+         * @var    integer|null
          * @access private
          */
-        
-        private $accountId = null;
+        private int|null $accountId = null;
         
         /**
-         * Reference of an account manager storing the account..
+         * Reference of an account manager storing the account.
          * 
-         * @var    object
+         * @var    object|null
          * @access private
          */
-        
-        private $accountManager = null;
+        private AccountManager|null $accountManager = null;
         
         /**
          * Name of the service used by an account, ex. <i>Hosting ABC</i>.
          * 
-         * @var    string
+         * @var    string|null
          * @access private
          */
-        
-        private $serviceName = "";
+        private string|null $serviceName = null;
         
         /**
          * Name of an account, ex. <i>John Doe</i> or <i>john@doe.com</i>.
          * 
-         * @var    string
+         * @var    string|null
          * @access private
          */
-        
-        private $accountName = "";
+        private string|null $accountName = null;
         
         /**
          * Secret of an account.
          * 
-         * @var    string
+         * @var    object|null
          * @access private
          */
-        
-        private $accountSecret = null;
+        private Secret|null $accountSecret = null;
         
         /*******************\
         |* MAGIC FUNCTIONS *|
         \*******************/
         
         /**
-         * Constructor for the class <i>Account</i>. It's used for setting
-         * core class parameters upon object instantiation.
+         * Generic PHP constructor for the class <i>Account</i>.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @param string $serviceName
+         * @param string|null $serviceName
          *   Account's service name that should be set.
-         * @param string $accountName
+         * @param string|null $accountName
          *   Account's name that should be set.
-         * @param object $secret
+         * @param object|null $secret
          *   Account's secret that should be set.
          * @return void
          */
-        
-        public function __construct($serviceName = "", $accountName = "",
-            $accountSecret = null)
+        public function __construct(
+            string|null $serviceName = null,
+            string|null $accountName = null,
+            Secret|null $accountSecret = null)
         {
             // Logic
             
-            $this->setServiceName($serviceName);
-            $this->setAccountName($accountName);
-            $this->setAccountSecret($accountSecret);
+            if ($serviceName !== NULL)
+            {
+                $this->setServiceName($serviceName);
+            }
+            
+            if ($accountName !== NULL)
+            {
+                $this->setAccountName($accountName);
+            }
+            
+            if ($accountSecret !== NULL)
+            {
+                $this->setAccountSecret($accountSecret);
+            }
         }
         
         /***************\
@@ -136,14 +135,14 @@
          * Returns an account's ID.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @return integer
-         *   ID of an account, ex. <i>123</i>.
+         * @return integer|null
+         *   ID of an account ex. <i>123</i>, or value <i>NULL</i>
+         *   if the ID wasn't set for the account.
          */
-        
-        public function getAccountId()
+        public function getAccountId() : int|null
         {
             // Logic
             
@@ -154,14 +153,14 @@
          * Returns an account's manager.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @return object
-         *   Reference to the account's manager.
+         * @return object|null
+         *   Reference to the account's manager, or value
+         *   <i>NULL</i> if the account's manager wasn't set.
          */
-        
-        public function getAccountManager()
+        public function getAccountManager() : AccountManager|null
         {
             // Logic
             
@@ -172,14 +171,14 @@
          * Returns an account's service name.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @return string
-         *   Name of an account's service, ex. <i>Hosting ABC</i>.
+         * @return string|null
+         *   Name of an account's service, ex. <i>Hosting ABC</i>, or value
+         *   <i>NULL</i> if the account's service name wasn't set.
          */
-        
-        public function getServiceName()
+        public function getServiceName() : string|null
         {
             // Logic
             
@@ -190,14 +189,14 @@
          * Returns an account's name.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @return string
-         *   Name of an account, ex. <i>John Doe</i> or <i>john@doe.com</i>.
+         * @return string|null
+         *   Name of an account, ex. <i>John Doe</i> or <i>john@doe.com</i>,
+         *   or value <i>NULL</i> if the account's name wasn't set.
          */
-        
-        public function getAccountName()
+        public function getAccountName() : string|null
         {
             // Logic
             
@@ -208,14 +207,14 @@
          * Returns an account's secret.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @return object
-         *   Secret of an account.
+         * @return object|null
+         *   Secret of an account, or value <i>NULL</i> if the account's
+         *   secret wasn't set.
          */
-        
-        public function getAccountSecret()
+        public function getAccountSecret() : Secret|null
         {
             // Logic
             
@@ -230,15 +229,15 @@
          * Sets an account's ID.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param integer $accountId
          *   New account's ID.
-         * @return void
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setAccountId($accountId)
+        public function setAccountId($accountId) : self
         {
             // Logic
             
@@ -248,21 +247,23 @@
             }
             
             $this->accountId = $accountId;
+            
+            return $this;
         }
         
         /**
          * Sets an account's manager.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param object $accountManager
          *   New account's manager.
-         * @return void
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setAccountManager($accountManager)
+        public function setAccountManager($accountManager) : self
         {
             // Logic
             
@@ -276,6 +277,8 @@
             }
             
             $this->accountManager = $accountManager;
+            
+            return $this;
         }
         
         /**
@@ -284,53 +287,57 @@
          * Note: Service name parameter is required, it must be set.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param string $serviceName
          *   New account's service name.
-         * @return void
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setServiceName($serviceName)
+        public function setServiceName($serviceName) : self
         {
             // Logic
             
             $this->serviceName = $serviceName;
+            
+            return $this;
         }
         
         /**
          * Sets an account's name.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param string $accountName
          *   New account's name.
-         * @return void
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setAccountName($accountName)
+        public function setAccountName($accountName) : self
         {
             // Logic
             
             $this->accountName = $accountName;
+            
+            return $this;
         }
         
         /**
          * Sets an account's secret.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param mixed $accountSecret
          *   New account's secret.
-         * @return void
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setAccountSecret($accountSecret)
+        public function setAccountSecret($accountSecret) : self
         {
             // Logic
             
@@ -340,25 +347,9 @@
             }
             
             $this->accountSecret = $accountSecret;
+            
+            return $this;
         }
-        
-        /****************\
-        |* CORE METHODS *|
-        \****************/
-        
-        // CORE METHODS GO HERE
-        
-        /*****************\
-        |* CHECK METHODS *|
-        \*****************/
-        
-        // CHECK METHODS GO HERE
-        
-        /*****************\
-        |* OTHER METHODS *|
-        \*****************/
-        
-        // OTHER METHODS GO HERE
     }
     
 ?>

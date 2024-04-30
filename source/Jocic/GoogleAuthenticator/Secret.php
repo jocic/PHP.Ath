@@ -84,10 +84,22 @@
         /**
          * Set or generated value of the secret.
          * 
-         * @var    string
+         * @var    string|NULL
          * @access private
          */
-        private $value = "";
+        private string|NULL $value = null;
+        
+        /*******************\
+        |* OTHER VARIABLES *|
+        \*******************/
+        
+        /**
+         * Object containing <i>Base 32</i> encoder.
+         * 
+         * @var    object|null
+         * @access private
+         */
+        private Base32|NULL $encoder = null;
         
         /*******************\
         |* MAGIC FUNCTIONS *|
@@ -100,10 +112,11 @@
          * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @param string $value
-         *   Value that should be set.
+         * @param string|null $value
+         *   Secret that should be set - otherwise the secret will be
+         *   generated automatically upon object instantiation.
          */
-        public function __construct($value = null)
+        public function __construct(string|null $value = null)
         {
             // Logic
             
@@ -150,7 +163,7 @@
         {
             // Logic
             
-            if ($this->encoder == NULL) {
+            if ($this->encoder == null) {
                 $this->encoder = new Base32();
             }
             
@@ -173,7 +186,7 @@
          * @return object
          *   Reference to the object calling the method - current object.
          */
-        public function setValue($secret) : self
+        public function setValue(string $secret) : self
         {
             // Logic
             
@@ -251,7 +264,7 @@
          * @return bool
          *   Value <i>TRUE</i> if secret is valid, and vice versa.
          */
-        public function isSecretValid($secret) : bool
+        public function isSecretValid(string $secret) : bool
         {
             // Core Variables
             

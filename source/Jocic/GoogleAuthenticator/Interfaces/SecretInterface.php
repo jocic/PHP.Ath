@@ -73,7 +73,7 @@
          * @return object
          *   Reference to the object calling the method - current object.
          */
-        public function setValue($secret) : self;
+        public function setValue(string $secret) : self;
         
         /****************\
         |* CORE METHODS *|
@@ -107,7 +107,7 @@
          * @return bool
          *   Value <i>TRUE</i> if secret is valid, and vice versa.
          */
-        public function isSecretValid($secret) : bool;
+        public function isSecretValid(string $secret) : bool;
     }
     
 ?>

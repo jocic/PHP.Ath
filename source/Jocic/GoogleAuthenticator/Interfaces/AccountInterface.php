@@ -2,7 +2,7 @@
     
     /*******************************************************************\
     |* Author: Djordje Jocic                                           *|
-    |* Year: 2018                                                      *|
+    |* Year: 2024                                                      *|
     |* License: MIT License (MIT)                                      *|
     |* =============================================================== *|
     |* Personal Website: http://www.djordjejocic.com/                  *|
@@ -29,17 +29,18 @@
     |* OTHER DEALINGS IN THE SOFTWARE.                                 *|
     \*******************************************************************/
     
-    namespace Jocic\GoogleAuthenticator;
+    namespace Jocic\GoogleAuthenticator\Interfaces;
+    
+    use Jocic\GoogleAuthenticator\Secret;
     
     /**
-     * <i>AccountInterface</i> is an interface used to enforce implementation of
-     * core account related methods.
+     * <i>AccountInterface</i> is an interface used to enforce implementation
+     * of core methods of the class <i>Account</i>.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
     interface AccountInterface
     {
         /***************\
@@ -50,115 +51,113 @@
          * Returns an account's ID.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
+         * 
+         * @return integer|null
+         *   ID of an account ex. <i>123</i>, or value <i>NULL</i>
+         *   if the ID wasn't set for the account.
          */
-        
-        public function getAccountId();
+        public function getAccountId() : int|null;
         
         /**
          * Returns an account's service name.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
+         * 
+         * @return string|null
+         *   Name of an account's service, ex. <i>Hosting ABC</i>, or value
+         *   <i>NULL</i> if the account's service name wasn't set.
          */
-        
-        public function getServiceName();
+        public function getServiceName() : string|null;
         
         /**
          * Returns an account's name.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
+         * 
+         * @return string|null
+         *   Name of an account, ex. <i>John Doe</i> or <i>john@doe.com</i>,
+         *   or value <i>NULL</i> if the account's name wasn't set.
          */
-        
-        public function getAccountName();
+        public function getAccountName() : string|null;
         
         /**
          * Returns an account's secret.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
+         * 
+         * @return object|null
+         *   Secret of an account, or value <i>NULL</i> if the account's
+         *   secret wasn't set.
          */
-        
-        public function getAccountSecret();
+        public function getAccountSecret() : Secret|null;
         
         /***************\
         |* SET METHODS *|
         \***************/
         
         /**
-         * Sets an account's ID.
+         * Sets an account's ID, ex. <i>1337</i>.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param integer $accountId
          *   New account's ID.
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setAccountId($accountId);
+        public function setAccountId(int $accountId) : self;
         
         /**
          * Sets an account's service name, ex. <i>FastFood ABC</i>.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param string $serviceName
          *   New account's service name.
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setServiceName($serviceName);
+        public function setServiceName(string $serviceName) : self;
         
         /**
          * Sets an account's name, ex. <i>John Doe</i>.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param string $accountName
          *   New account's name.
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setAccountName($accountName);
+        public function setAccountName(string $accountName) : self;
         
         /**
          * Sets an account's secret.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param object $accountSecret
          *   New account's secret.
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setAccountSecret($accountSecret);
-        
-        /****************\
-        |* CORE METHODS *|
-        \****************/
-        
-        // CORE METHODS GO HERE
-        
-        /*****************\
-        |* CHECK METHODS *|
-        \*****************/
-        
-        // CHECK METHODS GO HERE
-        
-        /*****************\
-        |* OTHER METHODS *|
-        \*****************/
-        
-        // OTHER METHODS GO HERE
+        public function setAccountSecret(Secret $accountSecret) : self;
     }
     
 ?>
