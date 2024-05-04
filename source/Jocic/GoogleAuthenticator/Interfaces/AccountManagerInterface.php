@@ -2,7 +2,7 @@
     
     /*******************************************************************\
     |* Author: Djordje Jocic                                           *|
-    |* Year: 2018                                                      *|
+    |* Year: 2024                                                      *|
     |* License: MIT License (MIT)                                      *|
     |* =============================================================== *|
     |* Personal Website: http://www.djordjejocic.com/                  *|
@@ -29,17 +29,18 @@
     |* OTHER DEALINGS IN THE SOFTWARE.                                 *|
     \*******************************************************************/
     
-    namespace Jocic\GoogleAuthenticator;
+    namespace Jocic\GoogleAuthenticator\Interfaces;
+    
+    use Jocic\GoogleAuthenticator\Account;
     
     /**
      * <i>AccountManagerInterface</i> is an interface used to enforce
-     * implementation of core account manager related methods.
+     * implementation of core methods of the class <i>AccountManager</i>.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
     interface AccountManagerInterface
     {
         /***************\
@@ -50,11 +51,13 @@
          * Returns an array containing added accounts.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
+         * 
+         * @return array
+         *   Array containing all added accounts.
          */
-        
-        public function getAccounts();
+        public function getAccounts() : array;
         
         /***************\
         |* SET METHODS *|
@@ -64,14 +67,15 @@
          * Replaces manager's accounts with new ones.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param array $accounts
          *   Array containing new accounts that should be assigned.
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setAccounts($accounts);
+        public function setAccounts(array $accounts) : self;
         
         /****************\
         |* CORE METHODS *|
@@ -81,46 +85,49 @@
          * Adds an account to the manager.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param object $account
          *   Account that should be added.
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function addAccount($account);
+        public function addAccount(Account $account) : self;
         
         /**
          * Removes an account from the manager.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param mixed $account
-         *   Account that should be removed - ID, Name, or an Object.
+         *   Identifier of an account, or an account object, that should be
+         *   removed from the manager - ID, Name, Object, etc.
+         * @return bool
+         *   Value <i>TRUE</i> if an account was removed, and vice versa.
          */
-        
-        public function removeAccount($account);
+        public function removeAccount(mixed $account) : bool;
         
         /**
-         * Finds an account in the manager.
+         * Finds an account associated with the manager.
+         * 
+         * <strong>Note:</strong> Depending on your implementation, you can
+         * use an Account object containing partial information about the
+         * account you are searching for ie. just the name, etc.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param mixed $account
-         *   Account that should be removed - ID, Name, or an Object.
+         *   Identifier of an account, or an account object, that should be
+         *   removed from the manager - ID, Name, Object, etc.
+         * @return object|null
+         *   Account object that was found, or value <i>NULL</i> if it wasn't.
          */
-        
-        public function findAccount($account);
-        
-        /*****************\
-        |* CHECK METHODS *|
-        \*****************/
-        
-        // CHECK METHODS GO HERE
+        public function findAccount(mixed $account) : Account|null;
         
         /*****************\
         |* OTHER METHODS *|
@@ -130,11 +137,13 @@
          * Resets account manager, essentially removing all added accounts.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
+         * 
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function reset();
+        public function reset() : self;
     }
     
 ?>

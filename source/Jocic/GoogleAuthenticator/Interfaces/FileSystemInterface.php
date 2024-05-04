@@ -29,16 +29,17 @@
     |* OTHER DEALINGS IN THE SOFTWARE.                                 *|
     \*******************************************************************/
     
-    namespace Jocic\GoogleAuthenticator;
+    namespace Jocic\GoogleAuthenticator\Interfaces;
     
     /**
-     * <i>FileSystem</i> class contains core IO methods.
+     * <i>FileSystemInterface</i> is an interface used to enforce
+     * implementation of core methods of the class <i>FileSystem</i>.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
      * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    class FileSystem implements Interfaces\FileSystemInterface
+    interface FileSystemInterface
     {
         /****************\
         |* CORE METHODS *|
@@ -53,53 +54,11 @@
          * 
          * @param string $fileLocation
          *   File location that should be used for loading.
-         * @param integer $bufferSize
-         *   Buffer size in bytes that will be used for loading.
-         * @param bool $suppressException
-         *   Value <i>TRUE</i> if you want to suppress exception, and vice versa.
          * @return string|null
          *   Contents of a desired file, or value <i>NULL</i> if the
          *   file couldn't be loaded.
          */
-        public function load(string $fileLocation, int $bufferSize = 1024,
-            bool $suppressException = false) : string|null
-        {
-            // Core Variables
-            
-            $fileHandler = null;
-            $contents    = null;
-            
-            // Logic
-            
-            try
-            {
-                $fileHandler = fopen($fileLocation, "r");
-                
-                if ($fileHandler !== false)
-                {
-                    while (!feof($fileHandler))
-                    {
-                        $contents .= fread($fileHandler, $bufferSize);
-                    }
-                }
-            }
-            catch (\Exception $e)
-            {
-                if (!$suppressException)
-                {
-                    throw new \Exception("An unkown IO error occured.");
-                }
-            }
-            finally
-            {
-                if ($fileHandler != null)
-                {
-                    fclose($fileHandler);
-                }
-            }
-            
-            return $contents;
-        }
+        public function load(string $fileLocation) : string|null;
         
         /**
          * Saves contents to a desired file location.
@@ -110,49 +69,12 @@
          * 
          * @param string $fileLocation
          *   File location that should be used for saving.
-         * @param mixed $contents
+         * @param string $contents
          *   Contents that should be saved to a desired file.
-         * @param bool $suppressException
-         *   Value <i>TRUE</i> if you want to suppress exception, and vice versa.
          * @return bool
          *   Value <i>TRUE</i> if data was saved, and vice versa.
          */
-        public function save(string $fileLocation, string $contents,
-            bool $suppressException = false) : bool
-        {
-            // Core Variables
-            
-            $fileHandler  = null;
-            $bytesWritten = 0;
-            
-            // Logic
-            
-            try
-            {
-                $fileHandler  = fopen($fileLocation, "w");
-                
-                if ($fileHandler !== false)
-                {
-                    $bytesWritten = fwrite($fileHandler, $contents);
-                }
-            }
-            catch (\Exception $e)
-            {
-                if (!$suppressException)
-                {
-                    throw new \Exception("An unkown IO error occured.");
-                }
-            }
-            finally
-            {
-                if ($fileHandler != null)
-                {
-                    fclose($fileHandler);
-                }
-            }
-            
-            return $bytesWritten > 0;
-        }
+        public function save(string $fileLocation, string $contents) : bool;
     }
     
 ?>

@@ -31,69 +31,72 @@
     
     namespace Jocic\GoogleAuthenticator;
     
+    use Jocic\GoogleAuthenticator\FileSystem;
+    
     /**
-     * <i>AccountManager</i> class is used for storage and management of
-     * created <i>Account</i> classes.
+     * <i>AccountManager</i> class is used for long-term storage and
+     * account management in your application. It provides basic methods
+     * to get you started, and is meant to be extended.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
      * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    class AccountManager extends AccountManagerCore
-        implements AccountManagerInterface
+    class AccountManager implements Interfaces\AccountManagerInterface
     {
+        /******************\
+        |* CORE VARIABLES *|
+        \******************/
+        
+        /**
+         * Array containing manager's accounts.
+         * 
+         * @var    array
+         * @access protected
+         */
+        protected array $accounts = [];
+        
+        /**
+         * Integer containing last used ID.
+         * 
+         * @var    integer|null
+         * @access protected
+         */
+        protected int|null $lastId = null;
+        
         /***************\
         |* GET METHODS *|
         \***************/
         
         /**
-         * Returns a manager's unique identifier.
-         * 
-         * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
-         * @version   1.0.0
-         * 
-         * @return string
-         *   Value of manager's unique identifier.
-         */
-        
-        public function getManagerId()
-        {
-            // Logic
-            
-            return $this->managerId;
-        }
-        
-        /**
          * Returns an array containing added accounts.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return array
          *   Array containing all added accounts.
          */
-        
-        public function getAccounts()
+        public function getAccounts() : array
         {
             // Logic
             
-            return array_values($this->accounts);
+            return $this->accounts;
         }
         
         /**
-         * Returns the last available account ID.
+         * Returns the last assigned account ID.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @return integer
-         *   Last available account ID.
+         * @return integer|null
+         *   Last assigned account ID, or value <i>NULL</i> if
+         *   no IDs were assigned by the manager.
          */
-        
-        public function getLastId()
+        public function getLastId() : int|null
         {
             // Logic
             
@@ -104,14 +107,13 @@
          * Returns the next available account ID.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return integer
          *   Next available account ID.
          */
-        
-        public function getNextId()
+        public function getNextId() : int
         {
             // Logic
             
@@ -122,32 +124,25 @@
         |* SET METHODS *|
         \***************/
         
-        /**
+       /**
          * Replaces manager's accounts with new ones.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param array $accounts
          *   Array containing new accounts that should be assigned.
-         * @return void
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function setAccounts($accounts)
+        public function setAccounts(array $accounts) : self
         {
             // Step 1 - Reset Manager
             
             $this->reset();
             
-            // Step 2 - Check Array
-            
-            if (!is_array($accounts))
-            {
-                throw new \Exception("Provided accounts are not in an array.");
-            }
-            
-            // Step 3 - Process Accounts
+            // Step 2 - Process Accounts
             
             foreach ($accounts as $account)
             {
@@ -158,150 +153,373 @@
                 
                 $this->addAccount($account);
             }
-        }
-        
-        /**
-         * Sets an ID that was assigned to the newly added account.
-         * 
-         * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
-         * @version   1.0.0
-         * 
-         * @param integer $id
-         *   ID that should be set.
-         * @return void
-         */
-        
-        public function setLastId($lastId)
-        {
-            // Logic
             
-            if ($this->lastId >= $lastId)
-            {
-                throw new \Exception("Provided ID was already used.");
-            }
-            
-            $this->lastId = $lastId;
+            return $this;
         }
         
         /****************\
         |* CORE METHODS *|
         \****************/
         
+        public function incrementId() : void
+        {
+            // Logic
+            
+            $this->lastId++;
+        }
+        
         /**
          * Adds an account to the manager.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param object $account
          *   Account that should be added.
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function addAccount($account)
+        public function addAccount(Account $account) : self
         {
-            // Step 1 - Check Account Type
-            
-            if (!($account instanceof Account))
-            {
-                throw new \Exception("Invalid object type.");
-            }
-            
-            // Step 2 - Check Account State
-            
-            if ($account->getAccountManager() != null)
-            {
-                throw new \Exception("Account belongs to a manager, or has an ID assigned.");
-            }
-            
-            // Step 3 - Handle Account ID
+            // Step 1 - Handle Account ID
             
             if ($account->getAccountId() == null)
             {
                 $account->setAccountId($this->getNextId());
             }
             
-            $this->setLastId($account->getAccountId());
+            $this->incrementId();
             
-            // Step 4 - Add Account
+            // Step 2 - Add Account
             
             $this->accounts[] = $account;
             
             $account->setAccountManager($this);
+            
+            return $this;
         }
+        
+        /******************\
+        |* REMOVE METHODS *|
+        \******************/
         
         /**
          * Removes an account from the manager.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param mixed $account
-         *   Account that should be removed - ID, Name, or an Object.
+         *   Identifier of an account, or an account object, that should be
+         *   removed from the manager - ID, Name, Object, etc.
          * @return bool
          *   Value <i>TRUE</i> if an account was removed, and vice versa.
          */
-        
-        public function removeAccount($account)
+        public function removeAccount(mixed $account) : bool
         {
             // Logic
             
             if (is_numeric($account))
             {
-                return $this->removeByAccountId($account);
+                return $this->removeAccount__ID($account);
             }
             else if (is_string($account))
             {
-                return $this->removeByAccountName($account);
+                return $this->removeAccount__NAME($account);
             }
             else if ($account instanceof Account)
             {
-                return $this->removeByAccountObject($account);
+                return $this->removeAccount__OBJECT($account);
             }
             
             throw new \Exception("Option couldn't be determined.");
+            
+            return false;
         }
         
         /**
-         * Finds an account in the manager.
+         * Removes an account from the manager using the account's ID.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @param integer $accountId
+         *   ID of an account that should be removed.
+         * @return bool
+         *   Value <i>TRUE</i> if an account was removed, and vice versa.
+         */
+        protected function removeAccount__ID(
+            int $accountId) : bool
+        {
+            // Core Variables
+            
+            $accounts = $this->getAccounts();
+            
+            // Step 1 - Check Value
+            
+            if (!is_numeric($accountId))
+            {
+                throw new \Exception("Provided ID isn't numeric.");
+            }
+            
+            // Step 2 - Remove Account
+            
+            foreach ($accounts as $accountKey => $accountObject)
+            {
+                if ($accountObject->getAccountId() == $accountId)
+                {
+                    unset($accounts[$accountKey]);
+                    
+                    $this->accounts = $accounts;
+                    
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        /**
+         * Removes an account from the manager using the account's name.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @param string $accountName
+         *   Name of an account that should be removed.
+         * @return bool
+         *   Value <i>TRUE</i> if an account was removed, and vice versa.
+         */
+        protected function removeAccount__NAME(
+            string $accountName) : bool
+        {
+            // Core Variables
+            
+            $accounts = $this->getAccounts();
+            
+            // Step 1 - Check Value
+            
+            if (!is_string($accountName))
+            {
+                throw new \Exception("Provided ID isn't string.");
+            }
+            
+            // Step 2 - Remove Account
+            
+            foreach ($accounts as $accountKey => $accountObject)
+            {
+                if ($accountObject->getAccountName() == $accountName)
+                {
+                    unset($accounts[$accountKey]);
+                    
+                    $this->accounts = $accounts;
+                    
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        /**
+         * Removes an account from the manager using the account's object.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @param object $accountObject
+         *   Object of an account that should be removed.
+         * @return bool
+         *   Value <i>TRUE</i> if an account was removed, and vice versa.
+         */
+        protected function removeAccount__OBJECT(
+            Account $accountObject) : bool
+        {
+            // Core Variables
+            
+            $identifier = null;
+            
+            // Logic
+            
+            if (($identifier = $accountObject->getAccountId()) != null)
+            {
+                return $this->removeAccount__ID($identifier);
+            }
+            else if (($identifier = $accountObject->getAccountName()) != null)
+            {
+                return $this->removeAccount__NAME($identifier);
+            }
+            
+            return false;
+        }
+        
+        /****************\
+        |* FIND METHODS *|
+        \****************/
+        
+        /**
+         * Finds an account associated with the manager.
+         * 
+         * <strong>Note:</strong> Depending on your implementation, you can
+         * use an Account object containing partial information about the
+         * account you are searching for ie. just the name, etc.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param mixed $account
-         *   Account that should be removed - ID, Name, or an Object.
-         * @return object
+         *   Identifier of an account, or an account object, that should be
+         *   removed from the manager - ID, Name, Object, etc.
+         * @return object|null
          *   Account object that was found, or value <i>NULL</i> if it wasn't.
          */
-        
-        public function findAccount($account)
+        public function findAccount(mixed $account) : Account|null
         {
             // Logic
             
             if (is_numeric($account))
             {
-                return $this->findByAccountId($account);
+                return $this->findAccount__ID($account);
             }
             else if (is_string($account))
             {
-                return $this->findByAccountName($account);
+                return $this->findAccount__NAME($account);
             }
             else if ($account instanceof Account)
             {
-                return $this->findByAccountObject($account);
+                return $this->findAccount__OBJECT($account);
             }
             
             throw new \Exception("Option couldn't be determined.");
+            
+            return null;
+        }
+        
+        /**
+         * Finds and returns an account from the manager using
+         * the account's ID.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @param integer $accountId
+         *   ID of an account that should be found.
+         * @return object|null
+         *   Account object that was found, or value <i>NULL</i> if it wasn't.
+         */
+        protected function findAccount__ID(
+            int $accountId) : object|null
+        {
+            // Core Variables
+            
+            $accounts = $this->getAccounts();
+            
+            // Step 1 - Check Value
+            
+            if (!is_numeric($accountId))
+            {
+                throw new \Exception("Provided ID isn't numeric.");
+            }
+            
+            // Step 2 - Remove Account
+            
+            foreach ($accounts as $accountObject)
+            {
+                if ($accountObject->getAccountId() == $accountId)
+                {
+                    return $accountObject;
+                }
+            }
+            
+            return null;
+        }
+        
+        /**
+         * Finds and returns an account from the manager using
+         * the account's name.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @param string $accountName
+         *   Name of an account that should be found.
+         * @return object|null
+         *   Account object that was found, or value <i>NULL</i> if it wasn't.
+         */
+        protected function findAccount__NAME(
+            string $accountName) : object|null
+        {
+            // Core Variables
+            
+            $accounts = $this->getAccounts();
+            
+            // Step 1 - Check Value
+            
+            if (!is_string($accountName))
+            {
+                throw new \Exception("Provided ID isn't string.");
+            }
+            
+            // Step 2 - Find Account
+            
+            foreach ($accounts as $accountObject)
+            {
+                if ($accountObject->getAccountName() == $accountName)
+                {
+                    return $accountObject;
+                }
+            }
+            
+            return null;
+        }
+        
+        /**
+         * Finds and returns an account from the manager using
+         * the account's object.
+         * 
+         * @author    Djordje Jocic <office@djordjejocic.com>
+         * @copyright 2024 All Rights Reserved
+         * @version   1.0.0
+         * 
+         * @param object $accountObject
+         *   Object of an account that should be found.
+         * @return object|null
+         *   Account object that was found, or value <i>NULL</i> if it wasn't.
+         */
+        protected function findAccount__OBJECT(
+            Account $accountObject) : object|null
+        {
+            // Core Variables
+            
+            $identifier = null;
+            
+            // Logic
+            
+            if (($identifier = $accountObject->getAccountId()) != null)
+            {
+                return $this->findAccount__ID($identifier);
+            }
+            else if (($identifier = $accountObject->getAccountName()) != null)
+            {
+                return $this->findAccount__NAME($identifier);
+            }
+            
+            return null;
         }
         
         /**
          * Saves manager's accounts to a file.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param string $fileLocation
@@ -309,13 +527,16 @@
          * @return bool
          *   Value <i>TRUE</i> if accounts were saved, and vice versa.
          */
-        
-        public function save($fileLocation)
+        public function save($fileLocation) : bool
         {
             // Core Variables
             
             $accounts = $this->getAccounts();
             $data     = [];
+            
+            // IO Variables
+            
+            $fileSystem = new FileSystem();
             
             // Step 1 - Serialize Data
             
@@ -336,7 +557,7 @@
             
             try
             {
-                return $this->saveToFile($fileLocation, $data);
+                return $fileSystem->save($fileLocation, $data, true);
             }
             catch (\Exception $e)
             {
@@ -348,7 +569,7 @@
          * Loads manager's accounts from a file.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @param string $fileLocation
@@ -358,8 +579,7 @@
          * @return bool
          *   Value <i>TRUE</i> if accounts were loaded, and vice versa.
          */
-        
-        public function load($fileLocation, $bufferSize = 1024)
+        public function load($fileLocation, $bufferSize = 1024) : bool
         {
             // Core Variables
             
@@ -368,15 +588,20 @@
             
             // IO Variables
             
+            $fileSystem   = new FileSystem();
             $fileContents = null;
             
             // Step 1 - Load Accounts
             
             try
             {
-                $fileContents = $this->loadFromFile($fileLocation, $bufferSize);
+                $fileContents = $fileSystem->load(
+                    $fileLocation, $bufferSize, true);
                 
-                $accounts = unserialize($fileContents);
+                if ($fileContents !== null)
+                {
+                    $accounts = unserialize($fileContents);
+                }
             }
             catch (\Exception $e)
             {
@@ -416,12 +641,6 @@
         }
         
         /*****************\
-        |* CHECK METHODS *|
-        \*****************/
-        
-        // CHECK METHODS GO HERE
-        
-        /*****************\
         |* OTHER METHODS *|
         \*****************/
         
@@ -429,18 +648,20 @@
          * Resets account manager, essentially removing all added accounts.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
-         * @return void
+         * @return object
+         *   Reference to the object calling the method - current object.
          */
-        
-        public function reset()
+        public function reset() : self
         {
             // Logic
             
             $this->accounts = [];
             $this->lastId   = 0;
+            
+            return $this;
         }
     }
     

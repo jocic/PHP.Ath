@@ -38,10 +38,9 @@
      * class <i>Account</i>.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
     class TestAccount extends TestCase
     {
         /*********************\
@@ -52,13 +51,12 @@
          * Tests <i>setAccountId</i> & <i>getAccountId</i> methods.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
-        public function testAccountIdMethods()
+        public function testAccountIdMethods() : void
         {
             // Core Variables
             
@@ -89,13 +87,12 @@
          * Tests <i>setServiceName</i> & <i>getServiceName</i> methods.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
-        public function testServiceNameMethods()
+        public function testServiceNameMethods() : void
         {
             // Core Variables
             
@@ -123,13 +120,12 @@
          * Tests <i>setAccountName</i> & <i>getAccountName</i> methods.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
-        public function testAccountNameMethods()
+        public function testAccountNameMethods() : void
         {
             // Core Variables
             
@@ -157,13 +153,12 @@
          * Tests <i>setAccountSecret</i> & <i>getAccountSecret</i> methods.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
-        public function testAccountSecretMethods()
+        public function testAccountSecretMethods() : void
         {
             // Core Variables
             
@@ -187,12 +182,6 @@
             }
         }
         
-        /*****************\
-        |* CHECK METHODS *|
-        \*****************/
-        
-        // CHECK METHODS GO HERE
-        
         /*******************\
         |* PRIMARY METHODS *|
         \*******************/
@@ -201,13 +190,12 @@
          * Tests constructor of the class.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
-        public function testConstructor()
+        public function testConstructor() : void
         {
             // Core Variables
             

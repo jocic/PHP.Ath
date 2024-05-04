@@ -2,7 +2,7 @@
     
     /*******************************************************************\
     |* Author: Djordje Jocic                                           *|
-    |* Year: 2018                                                      *|
+    |* Year: 2024                                                      *|
     |* License: MIT License (MIT)                                      *|
     |* =============================================================== *|
     |* Personal Website: http://www.djordjejocic.com/                  *|
@@ -30,70 +30,46 @@
     \*******************************************************************/
     
     use PHPUnit\Framework\TestCase;
-    use Jocic\GoogleAuthenticator\Secret;
-    use Jocic\GoogleAuthenticator\Account;
-    use Jocic\GoogleAuthenticator\AccountManager;
+    use Jocic\GoogleAuthenticator\Secret as MfaSecret;
+    use Jocic\GoogleAuthenticator\Account as MfaAccount;
+    use Jocic\GoogleAuthenticator\AccountManager as MfaAccountManager;
     
     /**
      * <i>TestAccountManager</i> class is used for testing method implementation
      * of the class <i>AccountManager</i>.
      * 
      * @author    Djordje Jocic <office@djordjejocic.com>
-     * @copyright 2018 All Rights Reserved
+     * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
-    class TestAccountManager extends TestCase
+    class Manager extends TestCase
     {
         /*********************\
         |* GET & SET METHODS *|
         \*********************/
         
         /**
-         * Tests <i>getManagerId</i> method.
-         * 
-         * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
-         * @version   1.0.0
-         * 
-         * @return void
-         */
-        
-        public function testGetManagerId()
-        {
-            // Core Variables
-            
-            $accountManager = new AccountManager();
-            
-            // Logic
-            
-            $this->assertTrue(strlen($accountManager->getManagerId()) == 40);
-            $this->assertTrue(preg_match("/^[A-z0-9]+$/", $accountManager->getManagerId()) == true);
-        }
-        
-        /**
          * Tests <i>setAccounts</i> & <i>getAccounts</i> methods.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testAccountsMethods()
         {
             // Core Variables
             
-            $accountManager = new AccountManager();
+            $accountManager = new MfaAccountManager();
             
             // Other Variables
             
             $setAccounts  = null;
             $testAccounts = [
-                new Account("A", "B", new Secret()),
-                new Account("C", "D", new Secret()),
-                new Account("E", "F", new Secret())
+                new MfaAccount("A", "B", new MfaSecret()),
+                new MfaAccount("C", "D", new MfaSecret()),
+                new MfaAccount("E", "F", new MfaSecret())
             ];
             
             // Step 2 - Test Valid Setting
@@ -112,26 +88,12 @@
                     "Invalid secret found.");
             }
             
-            // Step 2 - Test Invalid Setting - Array
-            
-            try
-            {
-                $accountManager->setAccounts(null);
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Provided accounts are not in an array.",
-                    $e->getMessage());
-            }
-            
-            // Step 3 - Test Invalid Setting - Object
+            // Step 2 - Test Invalid Setting - Object
             
             try
             {
                 $accountManager->setAccounts([
-                    new Secret()
+                    new MfaSecret()
                 ]);
                 
                 $this->fail("Exception should've been thrown!");
@@ -142,12 +104,6 @@
             }
         }
         
-        /*****************\
-        |* CHECK METHODS *|
-        \*****************/
-        
-        // CHECK METHODS GO HERE
-        
         /*******************\
         |* PRIMARY METHODS *|
         \*******************/
@@ -156,12 +112,11 @@
          * Tests <i>addAccount</i> method of the <i>AccountManager</i> class.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testAddAccountMethod()
         {
             // Core Variables
@@ -172,14 +127,14 @@
             // Other Variables
             
             $testAccounts = [
-                new Account("A", "B", new Secret()),
-                new Account("C", "D", new Secret()),
-                new Account("E", "F", new Secret())
+                new MfaAccount("A", "B", new MfaSecret()),
+                new MfaAccount("C", "D", new MfaSecret()),
+                new MfaAccount("E", "F", new MfaSecret())
             ];
             
             // Step 1 - Test Adding Accounts
             
-            $accountManager = new AccountManager();
+            $accountManager = new MfaAccountManager();
             
             foreach ($testAccounts as $testAccount)
             {
@@ -203,74 +158,42 @@
             
             // Step 2 - Test Adding Account With ID
             
-            $account = new Account("X", "X", new Secret());
+            $account = new MfaAccount("X", "X", new MfaSecret());
             
             $account->setAccountId(1337);
             
             $accountManager->addAccount($account);
             
-            $this->assertSame(1337, $accountManager->getLastId(),
+            $this->assertSame(4, $accountManager->getLastId(),
                 "Invalid last ID after pre-set account ID.");
             
-            $this->assertSame(1338, $accountManager->getNextId(),
+            $this->assertSame(5, $accountManager->getNextId(),
                 "Invalid next ID after pre-set account ID");
-            
-            // Step 3 - Test Adding Invalid Object
-            
-            $accountManager = new AccountManager();
-            
-            try
-            {
-                $accountManager->addAccount(new Secret());
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Invalid object type.", $e->getMessage());
-            }
-            
-            // Step 4 - Test Adding Assigned Account
-            
-            $accountManager = new AccountManager();
-            
-            try
-            {
-                $accountManager->addAccount($testAccounts[0]);
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Account belongs to a manager, or has an" .
-                    " ID assigned.", $e->getMessage());
-            }
         }
         
         /**
          * Tests <i>removeAccount</i> method of the <i>AccountManager</i> class.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testRemoveAccountMethod()
         {
             // Core Variables
             
-            $accountManager = new AccountManager();
+            $accountManager = new MfaAccountManager();
             
             // Other Variables
             
             $testAccounts = [
-                new Account("A", "B", new Secret()),
-                new Account("C", "D", new Secret()),
-                new Account("E", "F", new Secret()),
-                new Account("G", "H", new Secret()),
-                new Account("I", "J", new Secret())
+                new MfaAccount("A", "B", new MfaSecret()),
+                new MfaAccount("C", "D", new MfaSecret()),
+                new MfaAccount("E", "F", new MfaSecret()),
+                new MfaAccount("G", "H", new MfaSecret()),
+                new MfaAccount("I", "J", new MfaSecret())
             ];
             
             // Step 1 - Set Accounts
@@ -278,18 +201,6 @@
             $accountManager->setAccounts($testAccounts);
             
             // Step 2 - Test Removal By ID
-            
-            try
-            {
-                $accountManager->removeByAccountId("#");
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Provided ID isn't numeric.",
-                    $e->getMessage());
-            }
             
             $this->assertTrue($accountManager->removeAccount(1),
                 "Removal by \"ID\" failed - existing.");
@@ -299,18 +210,6 @@
             
             // Step 3 - Test Removal By Name
             
-            try
-            {
-                $accountManager->removeByAccountName(1337);
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Provided ID isn't string.",
-                    $e->getMessage());
-            }
-            
             $this->assertTrue($accountManager->removeAccount("D"),
                 "Removal by \"Name\" failed - existing.");
             
@@ -319,32 +218,20 @@
             
             // Step 4 - Test Removal By Object
             
-            try
-            {
-                $accountManager->removeByAccountObject(new Secret());
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Provided object isn't valid.",
-                    $e->getMessage());
-            }
-            
             $this->assertTrue($accountManager->removeAccount($testAccounts[2]),
                 "Removal by \"Object\" failed - existing.");
             
-            $this->assertFalse($accountManager->removeAccount(new Account("E", "F")),
+            $this->assertFalse($accountManager->removeAccount(new MfaAccount("E", "F")),
                 "Removal by \"Object\" failed - non-existing.");
             
-            $this->assertFalse($accountManager->removeAccount(new Account()),
+            $this->assertFalse($accountManager->removeAccount(new MfaAccount()),
                 "Removal by \"Object\" failed - no parameters.");
             
             // Step 5 - Test Invalid Removal Method
             
             try
             {
-                $accountManager->removeAccount(new Secret());
+                $accountManager->removeAccount(new MfaSecret());
                 
                 $this->fail("Exception should've been thrown!");
             }
@@ -361,27 +248,26 @@
          * Note: Finding by Account ID.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testFindAccountByIdMethod()
         {
             // Core Variables
             
-            $accountManager = new AccountManager();
+            $accountManager = new MfaAccountManager();
             $account        = null;
             
             // Other Variables
             
             $testAccounts = [
-                new Account("A", "B", new Secret()),
-                new Account("C", "D", new Secret()),
-                new Account("E", "F", new Secret()),
-                new Account("G", "H", new Secret()),
-                new Account("I", "J", new Secret())
+                new MfaAccount("A", "B", new MfaSecret()),
+                new MfaAccount("C", "D", new MfaSecret()),
+                new MfaAccount("E", "F", new MfaSecret()),
+                new MfaAccount("G", "H", new MfaSecret()),
+                new MfaAccount("I", "J", new MfaSecret())
             ];
             
             // Step 1 - Set Accounts
@@ -389,18 +275,6 @@
             $accountManager->setAccounts($testAccounts);
             
             // Step 2 - Test Finding By ID
-            
-            try
-            {
-                $accountManager->findByAccountId("#");
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Provided ID isn't numeric.",
-                    $e->getMessage());
-            }
             
             $account = $accountManager->findAccount(1);
             
@@ -417,27 +291,26 @@
          * Note: Finding by Account Name.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testFindAccountByNameMethod()
         {
             // Core Variables
             
-            $accountManager = new AccountManager();
+            $accountManager = new MfaAccountManager();
             $account        = null;
             
             // Other Variables
             
             $testAccounts = [
-                new Account("A", "B", new Secret()),
-                new Account("C", "D", new Secret()),
-                new Account("E", "F", new Secret()),
-                new Account("G", "H", new Secret()),
-                new Account("I", "J", new Secret())
+                new MfaAccount("A", "B", new MfaSecret()),
+                new MfaAccount("C", "D", new MfaSecret()),
+                new MfaAccount("E", "F", new MfaSecret()),
+                new MfaAccount("G", "H", new MfaSecret()),
+                new MfaAccount("I", "J", new MfaSecret())
             ];
             
             // Step 1 - Set Accounts
@@ -445,18 +318,6 @@
             $accountManager->setAccounts($testAccounts);
             
             // Step 2- Test Finding By Name
-            
-            try
-            {
-                $accountManager->findByAccountName(1337);
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Provided ID isn't string.",
-                    $e->getMessage());
-            }
             
             $account = $accountManager->findAccount("D");
             
@@ -473,27 +334,26 @@
          * Note: Finding by Account Object.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testFindAccountByObjectMethod()
         {
             // Core Variables
             
-            $accountManager = new AccountManager();
+            $accountManager = new MfaAccountManager();
             $account        = null;
             
             // Other Variables
             
             $testAccounts = [
-                new Account("A", "B", new Secret()),
-                new Account("C", "D", new Secret()),
-                new Account("E", "F", new Secret()),
-                new Account("G", "H", new Secret()),
-                new Account("I", "J", new Secret())
+                new MfaAccount("A", "B", new MfaSecret()),
+                new MfaAccount("C", "D", new MfaSecret()),
+                new MfaAccount("E", "F", new MfaSecret()),
+                new MfaAccount("G", "H", new MfaSecret()),
+                new MfaAccount("I", "J", new MfaSecret())
             ];
             
             // Step 1 - Set Accounts
@@ -502,27 +362,15 @@
             
             // Step 2 - Test Finding By Object
             
-            try
-            {
-                $accountManager->findByAccountObject(new Secret());
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Provided object isn't valid.",
-                    $e->getMessage());
-            }
-            
             $account = $accountManager->findAccount($testAccounts[2]);
             
             $this->assertSame("E", $account->getServiceName());
             
-            $account = $accountManager->findAccount(new Account("E", "F"));
+            $account = $accountManager->findAccount(new MfaAccount("E", "F"));
             
             $this->assertSame("E", $account->getServiceName());
             
-            $account = $accountManager->findAccount(new Account());
+            $account = $accountManager->findAccount(new MfaAccount());
             
             $this->assertSame(null, $account);
         }
@@ -533,26 +381,25 @@
          * Note: Invalid option passed.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testFindAccountMethodInvalid()
         {
             // Core Variables
             
-            $accountManager = new AccountManager();
+            $accountManager = new MfaAccountManager();
             
             // Other Variables
             
             $testAccounts = [
-                new Account("A", "B", new Secret()),
-                new Account("C", "D", new Secret()),
-                new Account("E", "F", new Secret()),
-                new Account("G", "H", new Secret()),
-                new Account("I", "J", new Secret())
+                new MfaAccount("A", "B", new MfaSecret()),
+                new MfaAccount("C", "D", new MfaSecret()),
+                new MfaAccount("E", "F", new MfaSecret()),
+                new MfaAccount("G", "H", new MfaSecret()),
+                new MfaAccount("I", "J", new MfaSecret())
             ];
             
             // Step 1 - Set Accounts
@@ -563,7 +410,7 @@
             
             try
             {
-                $accountManager->findAccount(new Secret());
+                $accountManager->findAccount(new MfaSecret());
                 
                 $this->fail("Exception should've been thrown!");
             }
@@ -578,27 +425,26 @@
          * Tests <i>save</i> and <i>load</i> methods of the project.
          * 
          * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
+         * @copyright 2024 All Rights Reserved
          * @version   1.0.0
          * 
          * @return void
          */
-        
         public function testSaveLoad()
         {
             // Core Variables
             
-            $accountManager = new AccountManager();
+            $accountManager = new MfaAccountManager();
             $saveLocation   = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "ga";
             
             // Other Variables
             
             $testAccounts = [
-                new Account("A", "B", new Secret()),
-                new Account("C", "D", new Secret()),
-                new Account("E", "F", new Secret()),
-                new Account("G", "H", new Secret()),
-                new Account("I", "J", new Secret())
+                new MfaAccount("A", "B", new MfaSecret()),
+                new MfaAccount("C", "D", new MfaSecret()),
+                new MfaAccount("E", "F", new MfaSecret()),
+                new MfaAccount("G", "H", new MfaSecret()),
+                new MfaAccount("I", "J", new MfaSecret())
             ];
             
             // Step 1 - Save Accounts
@@ -625,63 +471,14 @@
             
             // Step 4 - Test Invalid Save & Load
             
-            $this->assertFalse($accountManager->save("/tmp"),
+            $tmp = sys_get_temp_dir();
+            
+            $this->assertFalse($accountManager->save($tmp),
                 "\"TMP\" should be a directory.");
             
-            $this->assertFalse($accountManager->load("/tmp"),
+            $this->assertFalse($accountManager->load($tmp),
                 "\"TMP\" shouldn't be a readable file.");
-            
-            $accountManager->saveToFile($saveLocation, "");
-            
-            $this->assertFalse($accountManager->load($saveLocation),
-                "Empty file shouldn't be loadable.");
         }
-        
-        /*********************\
-        |* SECONDARY METHODS *|
-        \*********************/
-        
-        /**
-         * Tests various <i>helper</i> methods that didn't warrant creation of
-         * their own tests.
-         * 
-         * @author    Djordje Jocic <office@djordjejocic.com>
-         * @copyright 2018 All Rights Reserved
-         * @version   1.0.0
-         * 
-         * @return void
-         */
-        
-        public function testHelperMethods()
-        {
-            // Core Variables
-            
-            $accountManager = new AccountManager();
-            
-            // Step 1 - Last ID Test
-            
-            $accountManager->setLastId(1337);
-            
-            $this->assertEquals(1337, $accountManager->getLastId());
-            
-            try
-            {
-                $accountManager->setLastId(1000);
-                
-                $this->fail("Exception should've been thrown!");
-            }
-            catch (\Exception $e)
-            {
-                $this->assertEquals("Provided ID was already used.",
-                    $e->getMessage());
-            }
-        }
-        
-        /*****************\
-        |* OTHER METHODS *|
-        \*****************/
-        
-        // OTHER METHODS GO HERE
     }
     
 ?>

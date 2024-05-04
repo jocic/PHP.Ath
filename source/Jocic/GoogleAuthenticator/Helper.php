@@ -88,7 +88,7 @@
          * 
          * @return void
          */
-        protected function __wakeup() {}
+        public function __wakeup() {}
         
         /***************\
         |* GET METHODS *|

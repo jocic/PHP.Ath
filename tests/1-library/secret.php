@@ -55,7 +55,7 @@
          * 
          * @return void
          */
-        public function testValueMethods()
+        public function testValueMethods() : void
         {
             // Core Variables
             
@@ -106,7 +106,7 @@
          * 
          * @return void
          */
-        public function testValidation()
+        public function testValidation() : void
         {
             // Core Variables
             
@@ -145,7 +145,7 @@
          * 
          * @return void
          */
-        public function testGenerateMethod()
+        public function testGenerateMethod() : void
         {
             // Core Variables
             

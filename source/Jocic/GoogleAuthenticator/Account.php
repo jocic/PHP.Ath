@@ -254,6 +254,10 @@
         /**
          * Sets an account's manager.
          * 
+         * <strong>Note:</strong> This method is called by the
+         * <i>AccountManager</i> object once the account is associated with
+         * it through one of the <i>set</i> or <i>add</i> methods.
+         * 
          * @author    Djordje Jocic <office@djordjejocic.com>
          * @copyright 2024 All Rights Reserved
          * @version   1.0.0
@@ -270,10 +274,6 @@
             if (!($accountManager instanceof AccountManager))
             {
                 throw new \Exception("Invalid object used.");
-            }
-            else if ($this->accountManager != null)
-            {
-                throw new \Exception("Manager was already assigned.");
             }
             
             $this->accountManager = $accountManager;
