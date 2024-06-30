@@ -41,7 +41,7 @@
      * @param string $class_name
      *   Name of the class, ex. <i>Jocic\GoogleAuthenticator\Secret</i>.
      * @return bool
-     *   Value <i>TRUE</i> if class was included, and vice versa.
+     *   Value <i>TRUE</i> if the class was included, and vice versa.
      */
     
     function load_google_authenticator_class($class_name)
@@ -54,6 +54,10 @@
         ]) . ".php";
         
         // Logic
+        
+        if (class_exists($class_name)) {
+            return true;
+        }
         
         if (is_file($class_location))
         {

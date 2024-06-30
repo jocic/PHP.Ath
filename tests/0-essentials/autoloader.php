@@ -38,7 +38,6 @@
      * @copyright 2024 All Rights Reserved
      * @version   1.0.0
      */
-    
     class Autoloader extends TestCase
     {
         /*******************\
@@ -54,14 +53,32 @@
          * 
          * @return void
          */
-        
         public function testFunction()
         {
             // Core Variables
             
             $testValues = [
-                "\Jocic\GoogleAuthenticator\Helper" => true,
-                "\Jocic\GoogleAuthenticator\Potato" => false,
+                
+                "\Jocic\GoogleAuthenticator\Account"        => true,
+                "\Jocic\GoogleAuthenticator\Account"        => true,
+                "\Jocic\GoogleAuthenticator\AccountManager" => true,
+                "\Jocic\GoogleAuthenticator\AccountManager" => true,
+                "\Jocic\GoogleAuthenticator\Helper"         => true,
+                "\Jocic\GoogleAuthenticator\Helper"         => true,
+                "\Jocic\GoogleAuthenticator\Secret"         => true,
+                "\Jocic\GoogleAuthenticator\Secret"         => true,
+                "\Jocic\GoogleAuthenticator\Validator"      => true,
+                "\Jocic\GoogleAuthenticator\Validator"      => true,
+                
+                "\Jocic\GoogleAuthenticator\Account1"        => false,
+                "\Jocic\GoogleAuthenticator\Acc1ount"        => false,
+                "\Jocic\GoogleAuthenticator\Accountt"        => false,
+                "\Jocic\GoogleAuthenticator\Acc ount"        => false,
+                "\Jocic\GoogleAuthenticator\ Account"        => false,
+                "\Jocic\GoogleAuthenticator\AcOuNt"          => false,
+                "\Jocic\GoogleAuthenticator\Account Manager" => false,
+                "\Jocic\GoogleAuthenticator\Potato"          => false,
+                
             ];
             
             // Logic
